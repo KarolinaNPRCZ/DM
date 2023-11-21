@@ -1,0 +1,59 @@
+package io.github.nprcz.controller;
+
+import io.github.nprcz.model.Product;
+import io.github.nprcz.model.ProductRepository;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.net.URI;
+import java.util.List;
+
+@RestController
+public class ProductController {
+    private final ProductRepository productRepository;
+    public static final Logger logger = LoggerFactory.getLogger(ProductController.class);
+
+    public ProductController(final ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+    @GetMapping(value = "/products",params = {"!sort","!page","!size"})
+    ResponseEntity<List<Product>> readAllProducts(){
+        logger.warn("Exposing all the products!");
+        return ResponseEntity.ok(productRepository.findAll());
+    }
+    @GetMapping("/products")
+    ResponseEntity<List<Product>> readAllProducts(Pageable page){
+        logger.info("Custom pagable");
+        return ResponseEntity.ok(productRepository.findAll(page).getContent());
+    }
+    @GetMapping("/products/{id}")
+    ResponseEntity<Product> getProductById(@PathVariable int id){
+        logger.info("Finding product");
+        return productRepository.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+    @PutMapping("/products/{id}")
+    ResponseEntity<?> updateProductById(@PathVariable int id, @RequestBody @Valid Product productToUpdate){
+        if (!productRepository.existsById(id)){
+            return ResponseEntity.notFound().build();
+        }
+        productToUpdate.setId(id);
+      //  logger.info("Product Update");
+        productRepository.save(productToUpdate);
+        return ResponseEntity.noContent().build();
+    }
+    @PostMapping("/products")
+    ResponseEntity<Product> createProduct(@Valid @RequestBody  Product productToCreate){
+
+        //  logger.info("Product Update");
+
+        Product result =  productRepository.save(productToCreate);
+        return ResponseEntity.created(URI.create("/" + result.getId())).body(result);
+    }
+
+
+
+
+}
