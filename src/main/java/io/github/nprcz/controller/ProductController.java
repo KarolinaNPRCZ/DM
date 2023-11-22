@@ -45,7 +45,7 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
     @PostMapping("/products")
-    ResponseEntity<Product> createProduct(@Valid @RequestBody  Product productToCreate){
+    ResponseEntity<Product> createProduct(@Valid @RequestBody Product productToCreate){
 
         //  logger.info("Product Update");
 
