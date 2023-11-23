@@ -1,0 +1,18 @@
+spring:
+  h2.console:
+    enabled: true
+    path: /console
+  datasource:
+    url: jdbc:h2:file:./Dm-db
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+
+
+
+
+##configuration properties kiedy b?dziemy mieli szablony ta flaga
+##nie pozwoli nam na stworzenie wiecej niz jeden produkt do sprzedania
+##product.allowMultipleProductsFromTemplate: false
+##product.template.allowMultipleProducts: false

@@ -4,6 +4,7 @@ package io.github.nprcz;
 import jakarta.validation.Validator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -13,6 +14,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @SuppressWarnings("checkstyle:MissingJavadocType")
 @SpringBootApplication
+@ConfigurationPropertiesScan
 public class DmAppApplication {
 
 	@SuppressWarnings({"checkstyle:Indentation", "checkstyle:FileTabCharacter"})
