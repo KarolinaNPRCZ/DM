@@ -15,6 +15,7 @@ public interface ProductRepository {
     boolean existsById(Integer id);
     Optional<Product> findById(Integer id);
     Product save(Product entity);
+    boolean existsByDoneIsFalseAndOrder_Id(Integer orderId);
 
 
 }

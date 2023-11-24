@@ -4,34 +4,33 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
-@SuppressWarnings("checkstyle:MissingJavadocType")
 @Entity
 @Table(name = "products")
-public class Product {
-    @Id
+public class Product extends BaseProduct {
+   /* @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotBlank(message = "Products name: must not be empty")
-    private String name;
-    @SuppressWarnings("checkstyle:Indentation")
-
-
+    private String name;*/
     @NotNull(message = "Products quantity must be not null")
     @Min(value=0, message="Products quantity: positive number, the value must be a minimum of 0")
     private int quantity;
-    private boolean done;
+
+
+    private LocalDateTime deadline;
+    @Embedded
+    private Audit audit = new Audit();
+    @ManyToOne
+    @JoinColumn(name = "product_order_id")
+    private ProductOrder order;
+
+
 
     public Product() {
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public int getQuantity() {
         return quantity;
@@ -41,19 +40,27 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public boolean isDone() {
-        return done;
+
+    public LocalDateTime getDeadline() {
+        return deadline;
     }
 
-    public void setDone(boolean done) {
-        this.done = done;
+    ProductOrder getOrder() {
+        return order;
     }
 
-    public int getId() {
-        return id;
+    void setOrder(ProductOrder order) {
+        this.order = order;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setDeadline(LocalDateTime deadline) {
+        this.deadline = deadline;
+    }
+
+    public void updateFrom(final Product source){
+        super.updateFrom(source);
+        quantity = source.quantity;
+       deadline = source.deadline;
+       order =source.order;
     }
 }

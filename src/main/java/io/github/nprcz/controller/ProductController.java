@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
@@ -39,11 +40,24 @@ public class ProductController {
         if (!productRepository.existsById(id)){
             return ResponseEntity.notFound().build();
         }
-        productToUpdate.setId(id);
-      //  logger.info("Product Update");
-        productRepository.save(productToUpdate);
+        productRepository.findById(id).ifPresent(product -> {
+            product.updateFrom(productToUpdate);
+            productRepository.save(product);
+        });
         return ResponseEntity.noContent().build();
     }
+   /* @PutMapping("/products/{id}")
+    ResponseEntity<?> updateProductById(@PathVariable int id, @RequestBody @Valid Product productToUpdate){
+        if (!productRepository.existsById(id)){
+            return ResponseEntity.notFound().build();
+        }
+        productRepository.findById(id).ifPresent(product -> product.updateFrom(productToUpdate));
+        {
+            product.updateFrom(productToUpdate);
+            productRepository.save(product);
+        });
+        return ResponseEntity.noContent().build();
+    }*/
     @PostMapping("/products")
     ResponseEntity<Product> createProduct(@Valid @RequestBody  Product productToCreate){
 
@@ -51,6 +65,15 @@ public class ProductController {
 
         Product result =  productRepository.save(productToCreate);
         return ResponseEntity.created(URI.create("/" + result.getId())).body(result);
+    }
+    @Transactional
+    @PatchMapping("/products/{id}")
+   public ResponseEntity<?> toggleProduct(@PathVariable int id){
+        if (!productRepository.existsById(id)){
+            return ResponseEntity.notFound().build();
+        }
+        productRepository.findById(id).ifPresent(product -> product.setDone(!product.isDone()));
+        return ResponseEntity.noContent().build();
     }
 
 

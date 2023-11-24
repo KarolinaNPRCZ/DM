@@ -12,12 +12,12 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 
 
-@SuppressWarnings("checkstyle:MissingJavadocType")
+
 @SpringBootApplication
 @ConfigurationPropertiesScan
 public class DmAppApplication {
 
-	@SuppressWarnings({"checkstyle:Indentation", "checkstyle:FileTabCharacter"})
+
 	public static void main(String[] args)  {
 		SpringApplication.run(DmAppApplication.class, args);
 	}
