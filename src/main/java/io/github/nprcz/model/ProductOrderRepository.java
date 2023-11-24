@@ -11,6 +11,7 @@ public interface ProductOrderRepository {
    List<ProductOrder> findAll();
    Optional<ProductOrder> findById(Integer id);
    ProductOrder save(ProductOrder entity);
+   boolean existsByDoneIsFalseAndOrderOptions_Id(Integer orderOptionsId);
 
 
 

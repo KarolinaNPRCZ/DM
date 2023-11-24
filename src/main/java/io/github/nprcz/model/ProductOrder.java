@@ -1,11 +1,7 @@
 package io.github.nprcz.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -19,6 +15,9 @@ public class ProductOrder extends BaseProduct{
     private boolean done;*/
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "order")// zarządzanie taskami z poziomu grupy, pole zmapowane jako order
     private Set<Product> products;
+    @ManyToOne
+    @JoinColumn(name = "order_options_id")
+    private OrderOptions orderOptions;
     @Embedded
     private Audit audit = new Audit();
     public ProductOrder() {
@@ -30,6 +29,14 @@ public class ProductOrder extends BaseProduct{
 
      void setProducts(Set<Product> products) {
         this.products = products;
+    }
+
+    public OrderOptions getOrderOptions() {
+        return orderOptions;
+    }
+
+    public void setOrderOptions(OrderOptions orderOptions) {
+        this.orderOptions = orderOptions;
     }
 
     public void updateFrom(ProductOrder source) {

@@ -12,6 +12,8 @@ import java.util.List;
 @Repository
  interface SQLProductOrderRepository extends ProductOrderRepository, JpaRepository<ProductOrder,Integer > {
  @Override
- @Query("from ProductOrder o join fetch o.products")
+ @Query("select distinct o from ProductOrder o join fetch o.products")
  List<ProductOrder> findAll();
+ @Override
+ boolean existsByDoneIsFalseAndOrderOptions_Id(Integer orderOptionsId);
 }
