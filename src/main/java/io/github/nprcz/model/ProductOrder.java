@@ -27,7 +27,7 @@ public class ProductOrder extends BaseProduct{
         return products;
     }
 
-     void setProducts(Set<Product> products) {
+     public void setProducts(Set<Product> products) {
         this.products = products;
     }
 

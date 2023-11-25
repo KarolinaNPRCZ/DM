@@ -30,6 +30,10 @@ public class Product extends BaseProduct {
 
     public Product() {
     }
+    public Product(String name, LocalDateTime deadline ) {
+        super(name);
+        this.deadline = deadline;
+    }
 
 
     public int getQuantity() {
@@ -49,7 +53,7 @@ public class Product extends BaseProduct {
         return order;
     }
 
-    void setOrder(ProductOrder order) {
+  public   void setOrder(ProductOrder order) {
         this.order = order;
     }
 

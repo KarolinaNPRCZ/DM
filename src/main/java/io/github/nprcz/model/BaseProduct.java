@@ -14,6 +14,13 @@ abstract class BaseProduct {
     /*@Embedded
     private Audit audit = new Audit();*/
 
+    public BaseProduct(String name) {
+        this.name = name;
+    }
+
+    public BaseProduct() {
+    }
+
     public void updateFrom(final BaseProduct source){
         name = source.name;
         done = source.done;
@@ -43,4 +50,6 @@ abstract class BaseProduct {
     public void setId(int id) {
         this.id = id;
     }
+
+
 }
