@@ -39,6 +39,7 @@ public class ProductOrder extends BaseProduct{
         this.orderOptions = orderOptions;
     }
 
+
     public void updateFrom(ProductOrder source) {
         super.updateFrom(source);
         this.products = source.products;

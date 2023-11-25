@@ -5,10 +5,8 @@ import io.github.nprcz.model.ProductOrderRepository;
 import io.github.nprcz.model.ProductRepository;
 import io.github.nprcz.model.projection.OrderReadModel;
 import io.github.nprcz.model.projection.OrderWriteModel;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.annotation.RequestScope;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +19,7 @@ public class OrderProductService {
     private ProductOrderRepository productOrderRepository;
     private ProductRepository productRepository;
 
-    public OrderProductService(final ProductOrderRepository productOrderRepository,final ProductRepository productRepository) {
+    public OrderProductService(final ProductOrderRepository productOrderRepository, final ProductRepository productRepository) {
         this.productOrderRepository = productOrderRepository;
         this.productRepository = productRepository;
     }
@@ -42,19 +40,20 @@ public class OrderProductService {
         // changes to the ordermodel will not affect what is saved in the repo
         //we should make something like this for each entity
     }
+
     //we have an order that we want to close, but we cannot close the order if the order has
     // unclosed products (we use the product repository for this because there is a method that can check this)
-    public void toggleOrder(int productOrderId){
+    public void toggleOrder(int productOrderId) {
         //when we have productOrderId we can create productrepo.
         if (productRepository.existsByDoneIsFalseAndOrder_Id(productOrderId)) {
             //if something like this happens throw an exception, that order has unclosed product
-        throw new IllegalStateException("Order has undone products. Done all the products first");
+            throw new IllegalStateException("Order has undone products. Done all the products first");
         }
         //if for this id we don't find product order, throw exception, in other way for result change value done to opposite
-      ProductOrder result = productOrderRepository.findById(productOrderId)
-              //We can created own exception witch inherits IllegalStateException
-              .orElseThrow(()-> new IllegalStateException("ProductOrder with given id not found"));
-      result.setDone(!result.isDone());
+        ProductOrder result = productOrderRepository.findById(productOrderId)
+                //We can created own exception witch inherits IllegalStateException
+                .orElseThrow(() -> new IllegalStateException("ProductOrder with given id not found"));
+        result.setDone(!result.isDone());
     }
 
 }
