@@ -30,7 +30,7 @@ public class OrderOptionService {
     }
     //logikę tworzenia grupy
     public OrderReadModel createGroup(int orderOptionId, LocalDateTime deadline) {
-        if (configurationProperties.getTemplate().isAllowMultipleProducts() && orderRepository.existsByDoneIsFalseAndOrderOptions_Id(orderOptionId)){
+        if (!configurationProperties.getTemplate().isAllowMultipleProducts() && orderRepository.existsByDoneIsFalseAndOrderOptions_Id(orderOptionId)){
             throw new IllegalStateException("Only one undone Product Order for Options is allowed");
 
         }
