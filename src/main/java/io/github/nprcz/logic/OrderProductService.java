@@ -53,7 +53,9 @@ public class OrderProductService {
         ProductOrder result = productOrderRepository.findById(productOrderId)
                 //We can created own exception witch inherits IllegalStateException
                 .orElseThrow(() -> new IllegalStateException("ProductOrder with given id not found"));
+
         result.setDone(!result.isDone());
+        productOrderRepository.save(result);
     }
 
 }

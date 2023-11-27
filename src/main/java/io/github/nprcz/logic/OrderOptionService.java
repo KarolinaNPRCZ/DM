@@ -43,7 +43,9 @@ public class OrderOptionService {
                     //wyliczać deadline'y zadań na postawie kroków projektu i podanego deadline'u
                     .map(optionStep -> new Product(optionStep.getName(),deadline.plusDays(optionStep.getDaysToDeadline())))
                     .collect(Collectors.toSet()));
-                    return targetOrder;
+                    targetOrder.setOrderOptions(orderOptions);
+                    return orderRepository.save(targetOrder);
+
         }).orElseThrow(()-> new IllegalStateException("Order Options with given id not found"));
         return new OrderReadModel(result);
     }

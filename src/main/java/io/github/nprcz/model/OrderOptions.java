@@ -24,11 +24,14 @@ public class OrderOptions {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderOptions")
     private Set<OptionStep> optionSteps;
 
+    public OrderOptions() {
+    }
+
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
+     void setId(int id) {
         this.id = id;
     }
 
