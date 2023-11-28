@@ -1,7 +1,11 @@
 package io.github.nprcz;
 
+import io.github.nprcz.logic.OrderProductService;
+import io.github.nprcz.model.ProductOrderRepository;
+import io.github.nprcz.model.ProductRepository;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
@@ -23,6 +27,30 @@ public class ProductConfigurationProperties {
             this.allowMultipleProducts = allowMultipleProducts;
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

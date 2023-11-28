@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 //this is application service(we have yet domain service in DDD) this is very similiar to user story
 //user want save new order with products
 
-@Service
+//@Service commented because we try using Bean conf in LogicConfiguration class
 public class OrderProductService {
     private ProductOrderRepository productOrderRepository;
     private ProductRepository productRepository;
