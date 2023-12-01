@@ -1,5 +1,6 @@
 package io.github.nprcz;
 
+import com.zaxxer.hikari.util.DriverDataSource;
 import io.github.nprcz.model.Product;
 import io.github.nprcz.model.ProductRepository;
 import org.springframework.context.annotation.Bean;
@@ -8,12 +9,30 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+import javax.sql.DataSource;
 import java.util.*;
 
 @Configuration
 public class TestConfiguration {
+
     @Bean
+    @Primary
+    @Profile("!integration")//non integration profile
+
+    //configuration only for datasource our h2 db for tests
+    DataSource e2eTestDataSource(){
+        //we need connecting jdbc protocole with db in memory
+        //we must set flag because hibernate imposes migration, which need check existing tables
+        //when we aren't set flag. Connect are closing after closing connection with db and this is to fast for us.
+        var result = new DriverManagerDataSource("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1","","");
+        result.setDriverClassName("org.h2.Driver");
+        return result;
+    }
+
+    @Bean
+    @Primary
     @Profile("integration")
     ProductRepository testProductRepo(){
         return new ProductRepository(){

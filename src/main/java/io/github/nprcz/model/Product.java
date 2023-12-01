@@ -30,7 +30,7 @@ public class Product extends BaseProduct {
 
     public Product() {
     }
-    public Product(String name, LocalDateTime deadline ) {
+    public Product(String name, LocalDateTime deadline) {
         super(name);
         this.deadline = deadline;
     }
