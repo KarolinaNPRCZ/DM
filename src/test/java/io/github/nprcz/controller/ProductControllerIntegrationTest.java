@@ -1,15 +1,22 @@
 package io.github.nprcz.controller;
 
+import io.github.nprcz.model.BaseProduct;
 import io.github.nprcz.model.Product;
 import io.github.nprcz.model.ProductRepository;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import java.time.LocalDateTime;
 
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -38,6 +45,24 @@ public class ProductControllerIntegrationTest {
         //query to the address "/products/" + id -> instead of providing the entire address in the uriTemplate, we provide / because we are working on mock inmemory
         //and we expect a stats response of 2xxSuccessful
         mockMvc.perform(get("/products/" + id)).andExpect(status().is2xxSuccessful());
+
+    }
+    @Test
+    void httpPut_createProduct() throws Exception {
+
+        //given
+        String name  = "NoteBook A4";
+        JSONObject rqBody = new JSONObject();
+        rqBody.put("name",name);
+        //when
+        mockMvc.perform(post("/products")
+                        .content(rqBody.toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isCreated());
+    //then
+        final List<Product> products = productRepository.findAll();
+        assertThat(products).extracting(BaseProduct::getName).contains(name);
 
     }
 }

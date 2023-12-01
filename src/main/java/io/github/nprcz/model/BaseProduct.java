@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 @MappedSuperclass
-abstract class BaseProduct {
+public abstract class BaseProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
