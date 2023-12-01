@@ -31,8 +31,14 @@ public class Product extends BaseProduct {
     public Product() {
     }
     public Product(String name, LocalDateTime deadline) {
+     this(name, deadline,null);
+    }
+    public Product(String name, LocalDateTime deadline,ProductOrder productOrder) {
         super(name);
         this.deadline = deadline;
+        if (productOrder != null){
+            this.order = productOrder;
+        }
     }
 
 

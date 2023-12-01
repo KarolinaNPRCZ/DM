@@ -18,9 +18,9 @@ public class LogicConfiguration {
 
     @Bean
     OrderOptionService OrderOptionService(final OrderOptionsRepository optionsRepository,
-                                            final ProductOrderRepository orderRepository, final ProductConfigurationProperties productConfigurationProperties) {
+                                            final ProductOrderRepository orderRepository, final ProductConfigurationProperties productConfigurationProperties,final OrderProductService orderProductService) {
 
-        return new OrderOptionService(optionsRepository,orderRepository,productConfigurationProperties);
+        return new OrderOptionService(optionsRepository,orderRepository,productConfigurationProperties, orderProductService);
     }
 
 

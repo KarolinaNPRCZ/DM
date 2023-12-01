@@ -2,8 +2,9 @@ package io.github.nprcz.logic;
 
 import io.github.nprcz.ProductConfigurationProperties;
 import io.github.nprcz.model.*;
+import io.github.nprcz.model.projection.OrderProductWriteModel;
 import io.github.nprcz.model.projection.OrderReadModel;
-import org.springframework.stereotype.Service;
+import io.github.nprcz.model.projection.OrderWriteModel;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,11 +15,14 @@ public class OrderOptionService {
     private OrderOptionsRepository optionsRepository;
     private ProductOrderRepository orderRepository;
     private ProductConfigurationProperties configurationProperties;
+    private OrderProductService orderProductService;
 
-    public OrderOptionService(OrderOptionsRepository optionsRepository, ProductOrderRepository orderRepository, ProductConfigurationProperties configurationProperties) {
+    public OrderOptionService(OrderOptionsRepository optionsRepository, ProductOrderRepository orderRepository, ProductConfigurationProperties configurationProperties, OrderProductService orderProductService) {
         this.optionsRepository = optionsRepository;
         this.orderRepository = orderRepository;
         this.configurationProperties = configurationProperties;
+
+        this.orderProductService = orderProductService;
     }
 
     public OrderOptions createOrder(final OrderOptions source) {
@@ -28,26 +32,30 @@ public class OrderOptionService {
     public List<OrderOptions> readAll() {
         return optionsRepository.findAll();
     }
+
     //logikę tworzenia grupy
     public OrderReadModel createGroup(int orderOptionId, LocalDateTime deadline) {
-        if (!configurationProperties.getTemplate().isAllowMultipleProducts() && orderRepository.existsByDoneIsFalseAndOrderOptions_Id(orderOptionId)){
+        if (!configurationProperties.getTemplate().isAllowMultipleProducts() && orderRepository.existsByDoneIsFalseAndOrderOptions_Id(orderOptionId)) {
             throw new IllegalStateException("Only one undone Product Order for Options is allowed");
 
         }
 
-        ProductOrder result = optionsRepository.findById(orderOptionId)
+        OrderReadModel result = optionsRepository.findById(orderOptionId)
                 .map(orderOptions -> {
-            var targetOrder = new ProductOrder();
-            targetOrder.setName(orderOptions.getName());
-            targetOrder.setProducts(orderOptions.getOptionSteps().stream()
-                    //wyliczać deadline'y zadań na postawie kroków projektu i podanego deadline'u
-                    .map(optionStep -> new Product(optionStep.getName(),deadline.plusDays(optionStep.getDaysToDeadline())))
-                    .collect(Collectors.toSet()));
-                    targetOrder.setOrderOptions(orderOptions);
-                    return orderRepository.save(targetOrder);
+                    var targetOrder = new OrderWriteModel();
+                    targetOrder.setName(orderOptions.getName());
+                    targetOrder.setProducts(
+                            orderOptions.getOptionSteps().stream()
+                                    .map(optionStep -> {
+                                        var product = new OrderProductWriteModel();
+                                        product.setName(optionStep.getName());
+                                        product.setDeadline(deadline.plusDays(optionStep.getDaysToDeadline()));
+                                        return product;
+                                    }).collect(Collectors.toSet()));
+                    return orderProductService.createOrder(targetOrder);
 
-        }).orElseThrow(()-> new IllegalStateException("Order Options with given id not found"));
-        return new OrderReadModel(result);
+                }).orElseThrow(() -> new IllegalStateException("Order Options with given id not found"));
+        return result;
     }
 
 

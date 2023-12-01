@@ -14,8 +14,9 @@ public class OrderWriteModel {
 
         result.setName(name);//config name for order
         //we set result using mapping and for each product in order create product
-        result.setProducts(products.stream()
-                .map(OrderProductWriteModel::toProduct)
+        result.setProducts(
+                products.stream()
+                .map(source -> source.toProduct(result))
                 .collect(Collectors.toSet()));
         return result;
     }

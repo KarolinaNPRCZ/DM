@@ -2,7 +2,6 @@ package io.github.nprcz.logic;
 
 import io.github.nprcz.ProductConfigurationProperties;
 import io.github.nprcz.model.*;
-import io.github.nprcz.model.projection.OrderProductReadModel;
 import io.github.nprcz.model.projection.OrderReadModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,7 @@ class OrderOptionServiceTest {
 
         var mockProductOrderRepository = productOrderRepositoryReturning(true);
 
-        var toTest = new OrderOptionService(null, mockProductOrderRepository, configurationPropertiesRunning(false));
+        var toTest = new OrderOptionService(null, mockProductOrderRepository, configurationPropertiesRunning(false), null);
 
         var exception = catchThrowable(() -> toTest.createGroup(9, LocalDateTime.now()));
 
@@ -45,7 +44,7 @@ class OrderOptionServiceTest {
         var mockOrderOptionRepository = mock(OrderOptionsRepository.class);
         when(mockOrderOptionRepository.findById(anyInt())).thenReturn(Optional.empty());
 
-        var toTest = new OrderOptionService(mockOrderOptionRepository, null, mockConfig);
+        var toTest = new OrderOptionService(mockOrderOptionRepository, null, mockConfig, null);
 
         var exception = catchThrowable(() -> toTest.createGroup(9, LocalDateTime.now()));
 
@@ -63,7 +62,7 @@ class OrderOptionServiceTest {
         when(mockOrderOptionRepository.findById(anyInt())).thenReturn(Optional.empty());
 
 
-        var toTest = new OrderOptionService(mockOrderOptionRepository, mockProductOrderRepository, mockConfig);
+        var toTest = new OrderOptionService(mockOrderOptionRepository, mockProductOrderRepository, mockConfig, null);
 
         var exception = catchThrowable(() -> toTest.createGroup(9, LocalDateTime.now()));
 
@@ -84,13 +83,14 @@ class OrderOptionServiceTest {
                 .thenReturn(Optional.of(orderOption));
         // and
         InMemoryProductOrderRepo inMemoryProductOrderRepository =  inMemoryProductOrderRepo();
+        var serviceWithInMemRepo = dummyOrderProductService(inMemoryProductOrderRepository);
         int countBeforeCall = inMemoryProductOrderRepository.count();
         // and
         ProductConfigurationProperties mockConfig = configurationPropertiesRunning(true);
 
 
         //system under test
-        var toTest = new OrderOptionService(mockOrderOptionRepository, inMemoryProductOrderRepository, mockConfig);
+        var toTest = new OrderOptionService(mockOrderOptionRepository, inMemoryProductOrderRepository, mockConfig, serviceWithInMemRepo);
         //when
         OrderReadModel result = toTest.createGroup(1,today);
         //then
@@ -101,6 +101,10 @@ class OrderOptionServiceTest {
 
 
 
+    }
+
+    private static OrderProductService dummyOrderProductService(InMemoryProductOrderRepo inMemoryProductOrderRepository) {
+        return new OrderProductService(inMemoryProductOrderRepository, null);
     }
 
     private OrderOptions orderOptionsWith(String orderOptionName,Set<Integer> daysToDeadline){

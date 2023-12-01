@@ -1,6 +1,7 @@
 package io.github.nprcz.model.projection;
 
 import io.github.nprcz.model.Product;
+import io.github.nprcz.model.ProductOrder;
 
 import java.time.LocalDateTime;
 //this is DTO which we using for to transfer data with safty way becouse we aren't shering more that we need
@@ -25,8 +26,8 @@ public class OrderProductWriteModel {
         this.deadline = deadline;
     }
     //product must be created from order
-    public Product toProduct(){
-       return new Product(name,deadline);
+    public Product toProduct(ProductOrder productOrder){
+       return new Product(name,deadline,productOrder);
 
     }
 }
