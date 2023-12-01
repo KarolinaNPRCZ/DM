@@ -2,6 +2,7 @@ package io.github.nprcz;
 
 import com.zaxxer.hikari.util.DriverDataSource;
 import io.github.nprcz.model.Product;
+import io.github.nprcz.model.ProductOrder;
 import io.github.nprcz.model.ProductRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,7 +65,17 @@ public class TestConfiguration {
 
             @Override
             public Product save(Product entity) {
-                return products.put(products.size()+1,entity);
+                int key = products.size()+1;
+                try {
+                    //complement id field in entity in memory using reflection
+                    var field  =  Product.class.getSuperclass().getDeclaredField("id");
+                    field.setAccessible(true);
+                    field.set(entity, key);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+                 products.put(key,entity);
+                return products.get(key);
             }
 
             @Override
