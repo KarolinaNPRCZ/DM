@@ -3,6 +3,7 @@ package io.github.nprcz.controller;
 import io.github.nprcz.model.Product;
 import io.github.nprcz.model.ProductRepository;
 import jakarta.validation.Valid;
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
