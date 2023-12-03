@@ -3,6 +3,7 @@ package io.github.nprcz.model;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 import java.util.List;
@@ -16,6 +17,6 @@ public interface ProductRepository {
     Optional<Product> findById(Integer id);
     Product save(Product entity);
     boolean existsByDoneIsFalseAndOrder_Id(Integer orderId);
-
+    List<Product> findAllByOrder_Id(Integer id);
 
 }

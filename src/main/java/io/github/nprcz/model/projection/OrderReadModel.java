@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class OrderReadModel {
+    private int id;
     private String name;
 
     //Deadline from the latest product
@@ -20,6 +21,7 @@ public class OrderReadModel {
     //download order
     public OrderReadModel(ProductOrder source) {
         name = source.getName();
+        id = source.getId();
         //take date for each product and find maximal date - in all products;
         source.getProducts().stream().map(Product::getDeadline)
                 .max(LocalDateTime::compareTo)
@@ -55,5 +57,9 @@ public class OrderReadModel {
 
     public void setProducts(Set<OrderProductReadModel> products) {
         this.products = products;
+    }
+
+    public int getId() {
+        return id;
     }
 }

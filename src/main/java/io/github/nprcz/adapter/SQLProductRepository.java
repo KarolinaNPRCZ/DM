@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
  interface SQLProductRepository extends ProductRepository, JpaRepository<Product,Integer > {
  @Override
@@ -14,4 +16,7 @@ import org.springframework.stereotype.Repository;
  boolean existsById(@Param("id")Integer id);
 @Override
  boolean existsByDoneIsFalseAndOrder_Id(Integer orderId);
+ @Override
+ List<Product> findAllByOrder_Id(Integer id);
+
 }

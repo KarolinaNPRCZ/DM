@@ -82,6 +82,11 @@ public class TestConfiguration {
             public boolean existsByDoneIsFalseAndOrder_Id(Integer orderId) {
                 return false;
             }
+
+            @Override
+            public List<Product> findAllByOrder_Id(Integer id) {
+                return List.of();
+            }
         };
     }
 }
