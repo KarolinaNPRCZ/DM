@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -18,5 +20,12 @@ import java.util.List;
  boolean existsByDoneIsFalseAndOrder_Id(Integer orderId);
  @Override
  List<Product> findAllByOrder_Id(Integer id);
+ List<Product> findAllByDoneIsFalseAndDeadlineIsNullOrDoneIsFalseAndDeadlineLessThanEqual(LocalDateTime date);
+ @Override
+ default List<Product> readProductsToday(LocalDateTime date) {
+  return findAllByDoneIsFalseAndDeadlineIsNullOrDoneIsFalseAndDeadlineLessThanEqual(date);
+ }
+
 
 }
+
