@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
+@Configuration
 @ConfigurationProperties("product")
 public class ProductConfigurationProperties {
     private Template template;

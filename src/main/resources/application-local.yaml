@@ -7,12 +7,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-
-
-
-
-
-##configuration properties kiedy b?dziemy mieli szablony ta flaga
-##nie pozwoli nam na stworzenie wiecej niz jeden produkt do sprzedania
-##product.allowMultipleProductsFromTemplate: false
-##product.template.allowMultipleProducts: false
+management:
+ endpoints:
+  web:
+   exposure:
+     include: '*'
